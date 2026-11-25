@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Examination System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">ExamPortal</div>
+
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="#features">Features</a>
+            <a href="#about">About</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <h1>Online Examination System</h1>
+
+            <p>
+                A smarter way to conduct examinations. Create exams, share access codes and attend tests from anywhere.
+            </p>
+
+            <div class="buttons">
+                <a href="/student-login" class="btn student-btn">
+                    Student Login
+                </a>
+
+                <a href="/admin-login" class="btn admin-btn">
+                    Admin Login
+                </a>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="features" id="features">
+
+        <h2>Our Features</h2>
+
+        <div class="feature-container">
+
+            <div class="feature-card">
+                <h3>Easy Exam Creation</h3>
+                <p>Administrators can create and manage examinations.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>Unique Exam Code</h3>
+                <p>Students can join examinations using a unique access code.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>Automatic Evaluation</h3>
+                <p>Results are calculated automatically after submission.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>Timer Facility</h3>
+                <p>Students can attend examinations with a countdown timer.</p>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="about" id="about">
+        <h2>About Our Platform</h2>
+
+        <p>
+            Our Online Examination System provides a simple and efficient platform for conducting online tests. It helps administrators manage examinations and students attend tests securely.
+        </p>
+    </section>
+
+    <footer>
+        <p>© 2026 Online Examination System | All Rights Reserved</p>
+    </footer>
+
+</body>
+
+</html>

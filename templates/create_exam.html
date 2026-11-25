@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Create Examination</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">ExamPortal Admin</div>
+
+        <div class="nav-links">
+            <a href="/admin-dashboard">Dashboard</a>
+            <a href="/admin-logout">Logout</a>
+        </div>
+
+    </nav>
+
+    <div class="form-container">
+
+        <h2>Create New Examination</h2>
+
+        <p>Enter the examination details below.</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %} {% for category, message in messages %}
+        <div class="message {{ category }}">
+            {{ message }}
+        </div>
+        {% endfor %} {% endwith %}
+
+        <form action="/create-exam" method="POST">
+
+            <input type="text" name="exam_name" placeholder="Examination Name" required>
+
+            <input type="text" name="subject" placeholder="Subject" required>
+
+            <input type="number" name="duration" placeholder="Duration (Minutes)" min="1" required>
+
+            <input type="number" name="total_marks" placeholder="Total Marks" min="1" required>
+
+            <button type="submit">
+            Create Examination
+        </button>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>

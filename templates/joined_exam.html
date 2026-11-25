@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Examination Details</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">ExamPortal</div>
+
+        <div class="nav-links">
+            <a href="/student-dashboard">Dashboard</a>
+            <a href="/student-logout">Logout</a>
+        </div>
+
+    </nav>
+
+    <div class="form-container success-container">
+
+        <h2>Examination Joined Successfully!</h2>
+
+        <p>You are registered for this examination.</p>
+
+        <div class="exam-details">
+
+            <p>
+                <strong>Exam Name:</strong> {{ exam.exam_name }}
+            </p>
+
+            <p>
+                <strong>Subject:</strong> {{ exam.subject }}
+            </p>
+
+            <p>
+                <strong>Duration:</strong> {{ exam.duration }} Minutes
+            </p>
+
+            <p>
+                <strong>Total Marks:</strong> {{ exam.total_marks }}
+            </p>
+
+            <p>
+                <strong>Exam Code:</strong> {{ exam.exam_code }}
+            </p>
+
+            <p>
+                <strong>Status:</strong> {{ exam.status }}
+            </p>
+
+        </div>
+
+        <h3>You are ready for the examination!</h3>
+
+        <p>Click below to start your examination.</p>
+
+        <form action="{{ url_for('start_exam', exam_id=exam.exam_id) }}" method="POST">
+
+            <button type="submit">
+        Start Examination
+    </button>
+
+        </form>
+
+        <a href="/student-dashboard">
+            <button type="button">Back to Dashboard</button>
+        </a>
+
+    </div>
+
+</body>
+
+</html>

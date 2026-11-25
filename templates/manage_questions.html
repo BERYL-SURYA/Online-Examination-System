@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Manage Questions</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">ExamPortal Admin</div>
+
+        <div class="nav-links">
+            <a href="/admin-dashboard">Dashboard</a>
+            <a href="/admin-logout">Logout</a>
+        </div>
+
+    </nav>
+
+    <div class="dashboard">
+
+        <h1>Manage Examination Questions</h1>
+
+        <p>Select an examination to add questions.</p>
+
+        {% for exam in exams %}
+
+        <div class="dashboard-card">
+
+            <h3>{{ exam.exam_name }}</h3>
+
+            <p>Subject: {{ exam.subject }}</p>
+
+            <p>Exam Code: {{ exam.exam_code }}</p>
+
+            <p>Status: {{ exam.status }}</p>
+
+            <p>Questions Added: {{ exam.question_count }}</p>
+
+            {% if exam.status == 'Draft' %}
+
+            <a href="{{ url_for('add_question', exam_id=exam.exam_id) }}">
+                <button>Add Questions</button>
+            </a>
+
+            <form action="{{ url_for('publish_exam', exam_id=exam.exam_id) }}" method="POST" style="margin-top:15px;">
+
+                <button type="submit">
+                Publish Examination
+            </button>
+
+            </form>
+
+            {% else %}
+
+            <p>This examination is already published.</p>
+
+            {% endif %}
+
+        </div>
+
+        {% else %}
+
+        <h3>No examinations created yet!</h3>
+
+        {% endfor %}
+
+    </div>
+
+</body>
+
+</html>

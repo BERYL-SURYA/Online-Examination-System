@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Join Examination</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">ExamPortal</div>
+
+        <div class="nav-links">
+            <a href="/student-dashboard">Dashboard</a>
+            <a href="/student-logout">Logout</a>
+        </div>
+
+    </nav>
+
+    <div class="form-container">
+
+        <h2>Join Examination</h2>
+
+        <p>Enter the unique examination code shared by your admin.</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %} {% for category, message in messages %}
+
+        <div class="message {{ category }}">
+            {{ message }}
+        </div>
+
+        {% endfor %} {% endwith %}
+
+        <form action="/join-exam" method="POST">
+
+            <input type="text" name="exam_code" placeholder="Enter Exam Code" maxlength="20" required>
+
+            <button type="submit">
+            Join Examination
+        </button>
+
+        </form>
+
+        <br>
+
+        <a href="/student-dashboard">
+        Back to Dashboard
+    </a>
+
+    </div>
+
+</body>
+
+</html>

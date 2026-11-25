@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Manage Examinations</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            padding: 30px;
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+        }
+        
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #263238;
+            margin-bottom: 30px;
+        }
+        
+        .top-bar {
+            margin-bottom: 25px;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            background: #263b80;
+            color: white;
+            padding: 10px 18px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        
+        .back-btn:hover {
+            background: #172554;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th,
+        td {
+            padding: 14px 10px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        
+        th {
+            background: #263b80;
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background: #f5f7fa;
+        }
+        
+        tr:hover {
+            background: #eef2ff;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        
+        .draft {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .published {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .empty-message {
+            padding: 25px;
+            color: #777;
+            text-align: center;
+        }
+        
+        @media (max-width: 750px) {
+            .container {
+                overflow-x: auto;
+                padding: 20px;
+            }
+            table {
+                min-width: 750px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Manage Examinations</h1>
+
+        <div class="top-bar">
+
+            <a href="{{ url_for('admin_dashboard') }}" class="back-btn">
+                ← Back to Dashboard
+            </a>
+
+        </div>
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Exam ID</th>
+                    <th>Exam Name</th>
+                    <th>Exam Code</th>
+                    <th>Subject</th>
+                    <th>Duration</th>
+                    <th>Total Marks</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for exam in exams %}
+
+                <tr>
+
+                    <td>{{ exam.exam_id }}</td>
+
+                    <td>{{ exam.exam_name }}</td>
+
+                    <td>{{ exam.exam_code }}</td>
+
+                    <td>{{ exam.subject }}</td>
+
+                    <td>{{ exam.duration }} Minutes</td>
+
+                    <td>{{ exam.total_marks }}</td>
+
+                    <td>
+                        {% if exam.status == 'Published' %}
+                        <span class="status published">
+                                Published
+                            </span> {% else %}
+                        <span class="status draft">
+                                {{ exam.status }}
+                            </span> {% endif %}
+                    </td>
+
+                </tr>
+
+                {% else %}
+
+                <tr>
+                    <td colspan="7" class="empty-message">
+                        No examinations found.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</body>
+
+</html>

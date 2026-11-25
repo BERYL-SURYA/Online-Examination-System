@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo">ExamPortal</div>
+
+        <div class="nav-links">
+            <a href="/student-logout">Logout</a>
+        </div>
+    </nav>
+
+    <div class="form-container">
+
+        <h2>Welcome, {{ name }}!</h2>
+
+        <p>You have successfully logged in.</p>
+
+        <h3>Student Dashboard</h3>
+
+        <p>Your examinations will appear here.</p>
+
+        <a href="/join-exam">
+            <button type="button">Join Examination</button>
+        </a>
+
+    </div>
+
+</body>
+
+</html>

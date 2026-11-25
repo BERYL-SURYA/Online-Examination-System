@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Admin Dashboard</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">ExamPortal Admin</div>
+
+        <div class="nav-links">
+            <a href="/admin-logout">Logout</a>
+        </div>
+
+    </nav>
+
+    <div class="dashboard">
+
+        <h1>Welcome, Administrator!</h1>
+
+        <p>Manage your online examinations from here.</p>
+
+        <div class="dashboard-container">
+
+            <div class="dashboard-card">
+
+                <h3>Create Examination</h3>
+
+                <p>Create a new examination and set its duration.</p>
+
+                <a href="/create-exam">
+                    <button>Create Exam</button>
+                </a>
+
+            </div>
+
+            <div class="dashboard-card">
+
+                <h3>Manage Questions</h3>
+
+                <p>Add, edit and manage examination questions.</p>
+
+                <a href="/manage-questions">
+                    <button>Manage Questions</button>
+                </a>
+
+            </div>
+
+            <div class="dashboard-card">
+
+                <h3>Student Details</h3>
+
+                <p>View registered students.</p>
+
+                <button disabled>View Students</button>
+
+            </div>
+
+            <div class="dashboard-card">
+
+                <h3>Examination Results</h3>
+
+                <p>View student examination performance.</p>
+
+                <a href="{{ url_for('admin_results') }}">
+                    <button type="button">View Results</button>
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

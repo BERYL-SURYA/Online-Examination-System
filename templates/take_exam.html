@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Online Examination | ExamPortal</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        /* MAIN CONTAINER */
+        
+        .exam-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        /* EXAM HEADER */
+        
+        .exam-header {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .exam-header h2 {
+            color: #1e3a8a;
+            margin-bottom: 10px;
+        }
+        /* TIMER */
+        
+        #timer {
+            background: #dc2626;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 17px;
+        }
+        /* QUESTION AREA */
+        
+        .question-area {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+        
+        .question-box {
+            min-height: 250px;
+        }
+        
+        .question-box h3 {
+            color: #1e3a8a;
+            margin-bottom: 20px;
+        }
+        
+        .question-text {
+            font-size: 20px;
+            margin: 25px 0;
+            font-weight: 500;
+        }
+        /* OPTIONS */
+        
+        .option {
+            display: block;
+            padding: 15px;
+            margin: 12px 0;
+            background: #f1f5f9;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        
+        .option:hover {
+            background: #dbeafe;
+        }
+        
+        .option input {
+            margin-right: 12px;
+        }
+        /* PREVIOUS AND NEXT */
+        
+        .exam-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .exam-navigation button {
+            padding: 12px 30px;
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        
+        .exam-navigation button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+        /* QUESTION NAVIGATION */
+        
+        .question-navigation {
+            margin-top: 35px;
+        }
+        
+        .question-number {
+            width: 45px;
+            height: 45px;
+            margin: 7px;
+            border: none;
+            background: #e2e8f0;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .question-number.answered {
+            background: #16a34a;
+            color: white;
+        }
+        
+        .question-number.active {
+            outline: 3px solid #1e3a8a;
+        }
+        /* SUBMIT BUTTON */
+        
+        .submit-exam {
+            width: 100%;
+            margin-top: 35px;
+            padding: 15px;
+            background: #dc2626;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 17px;
+            cursor: pointer;
+        }
+        
+        .submit-exam:hover {
+            background: #b91c1c;
+        }
+        /* MOBILE RESPONSIVENESS */
+        
+        @media(max-width: 600px) {
+            .exam-container {
+                padding: 12px;
+            }
+            .question-area {
+                padding: 18px;
+            }
+            .question-text {
+                font-size: 17px;
+            }
+        }
+    </style>
+
+</head>
+
+
+<!-- BODY -->
+
+<body data-total-questions="{{ questions|length }}" data-expires-at="{{ expires_at_ms }}">
+
+
+    <!-- NAVIGATION BAR -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            ExamPortal
+        </div>
+
+        <div class="nav-links">
+
+            <span id="timer">
+                Time Remaining: Loading...
+            </span>
+
+        </div>
+
+    </nav>
+
+
+    <!-- EXAMINATION CONTAINER -->
+
+    <div class="exam-container">
+
+
+        <!-- EXAM DETAILS -->
+
+        <div class="exam-header">
+
+            <h2>{{ exam.exam_name }}</h2>
+
+            <p>
+                Subject: {{ exam.subject }}
+            </p>
+
+        </div>
+
+
+        <!-- EXAMINATION FORM -->
+
+        <form id="examForm" action="{{ url_for('submit_exam', attempt_id=attempt.attempt_id) }}" method="POST">
+
+
+            <div class="question-area">
+
+
+                <!-- QUESTIONS FROM DATABASE -->
+
+                {% for question in questions %}
+
+                <div class="question-box" id="question-{{ loop.index0 }}" style="display: none;">
+
+
+                    <h3>
+                        Question {{ loop.index }} of {{ questions|length }}
+                    </h3>
+
+
+                    <p class="question-text">
+                        {{ question.question_text }}
+                    </p>
+
+
+                    <!-- OPTION A -->
+
+                    <label class="option">
+
+                        <input type="radio"
+                               name="answer_{{ question.question_id }}"
+                               value="A">
+
+                        A. {{ question.option_a }}
+
+                    </label>
+
+
+                    <!-- OPTION B -->
+
+                    <label class="option">
+
+                        <input type="radio"
+                               name="answer_{{ question.question_id }}"
+                               value="B">
+
+                        B. {{ question.option_b }}
+
+                    </label>
+
+
+                    <!-- OPTION C -->
+
+                    <label class="option">
+
+                        <input type="radio"
+                               name="answer_{{ question.question_id }}"
+                               value="C">
+
+                        C. {{ question.option_c }}
+
+                    </label>
+
+
+                    <!-- OPTION D -->
+
+                    <label class="option">
+
+                        <input type="radio"
+                               name="answer_{{ question.question_id }}"
+                               value="D">
+
+                        D. {{ question.option_d }}
+
+                    </label>
+
+
+                </div>
+
+                {% endfor %}
+
+
+                <!-- PREVIOUS AND NEXT BUTTONS -->
+
+                <div class="exam-navigation">
+
+                    <button type="button" id="previousBtn" onclick="changeQuestion(-1)">
+
+                        Previous
+
+                    </button>
+
+
+                    <button type="button" id="nextBtn" onclick="changeQuestion(1)">
+
+                        Next
+
+                    </button>
+
+                </div>
+
+
+                <!-- QUESTION NAVIGATION -->
+
+                <div class="question-navigation">
+
+                    <h3>
+                        Question Navigation
+                    </h3>
+
+
+                    {% for question in questions %}
+
+                    <button type="button" class="question-number" id="nav-{{ loop.index0 }}" data-index="{{ loop.index0 }}">
+
+                        {{ loop.index }}
+
+                    </button> {% endfor %}
+
+                </div>
+
+
+                <!-- SUBMIT EXAMINATION -->
+
+                <button type="submit" class="submit-exam">
+
+                    Submit Examination
+
+                </button>
+
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+        // =================================
+        // 1. GET VALUES FROM HTML
+        // =================================
+
+        let currentQuestion = 0;
+
+        const totalQuestions = Number(
+            document.body.dataset.totalQuestions
+        );
+
+        const expiresAt = Number(
+            document.body.dataset.expiresAt
+        );
+
+        let submitted = false;
+
+
+
+        // =================================
+        // 2. DISPLAY QUESTION
+        // =================================
+
+        function showQuestion(index) {
+
+            if (index < 0 || index >= totalQuestions) {
+
+                return;
+
+            }
+
+
+            // Hide all questions
+
+            document.querySelectorAll('.question-box')
+                .forEach(box => {
+
+                    box.style.display = 'none';
+
+                });
+
+
+            // Show selected question
+
+            document.getElementById('question-' + index)
+                .style.display = 'block';
+
+
+            currentQuestion = index;
+
+
+            // Previous button
+
+            document.getElementById('previousBtn').disabled =
+                index === 0;
+
+
+            // Next button
+
+            document.getElementById('nextBtn').disabled =
+                index === totalQuestions - 1;
+
+
+            // Highlight active question
+
+            document.querySelectorAll('.question-number')
+                .forEach(button => {
+
+                    button.classList.remove('active');
+
+                });
+
+
+            document.getElementById('nav-' + index)
+                .classList.add('active');
+
+        }
+
+
+
+        // =================================
+        // 3. NEXT AND PREVIOUS
+        // =================================
+
+        function changeQuestion(direction) {
+
+            showQuestion(currentQuestion + direction);
+
+        }
+
+
+
+        // =================================
+        // 4. QUESTION NAVIGATION
+        // =================================
+
+        document.querySelectorAll('.question-number')
+            .forEach(button => {
+
+                button.addEventListener('click', function() {
+
+                    const index = Number(this.dataset.index);
+
+                    showQuestion(index);
+
+                });
+
+            });
+
+
+
+        // =================================
+        // 5. MARK ANSWERED QUESTIONS
+        // =================================
+
+        document.querySelectorAll('input[type="radio"]')
+            .forEach(input => {
+
+                input.addEventListener('change', function() {
+
+                    const questionBox = this.closest('.question-box');
+
+                    const index = Number(
+                        questionBox.id.replace('question-', '')
+                    );
+
+
+                    document.getElementById('nav-' + index)
+                        .classList.add('answered');
+
+                });
+
+            });
+
+
+
+        // =================================
+        // 6. COUNTDOWN TIMER
+        // =================================
+
+        function updateTimer() {
+
+            const remaining = Math.max(
+
+                0,
+
+                Math.floor((expiresAt - Date.now()) / 1000)
+
+            );
+
+
+            const minutes = Math.floor(remaining / 60);
+
+            const seconds = remaining % 60;
+
+
+            document.getElementById('timer').innerText =
+
+                "Time Remaining: " +
+
+                minutes + ":" +
+
+                String(seconds).padStart(2, '0');
+
+
+
+            // AUTOMATIC SUBMISSION WHEN TIME ENDS
+
+            if (remaining <= 0 && !submitted) {
+
+                submitted = true;
+
+                document.getElementById('examForm').submit();
+
+            }
+
+        }
+
+
+
+        // =================================
+        // 7. SUBMISSION CONFIRMATION
+        // =================================
+
+        document.getElementById('examForm')
+            .addEventListener('submit', function(event) {
+
+                if (!submitted) {
+
+                    const confirmSubmit = confirm(
+                        "Are you sure you want to submit the examination?"
+                    );
+
+
+                    if (!confirmSubmit) {
+
+                        event.preventDefault();
+
+                        return;
+
+                    }
+
+
+                    submitted = true;
+
+                }
+
+            });
+
+
+
+        // =================================
+        // 8. INITIALIZE EXAMINATION
+        // =================================
+
+        if (totalQuestions > 0) {
+
+            showQuestion(0);
+
+        } else {
+
+            document.querySelector('.question-area').innerHTML =
+                "<h3>No questions available for this examination.</h3>";
+
+            document.getElementById('timer').innerText =
+                "No examination questions";
+
+        }
+
+
+
+        // =================================
+        // 9. START TIMER
+        // =================================
+
+        if (totalQuestions > 0) {
+
+            updateTimer();
+
+            setInterval(updateTimer, 1000);
+
+        }
+    </script>
+
+
+</body>
+
+</html>

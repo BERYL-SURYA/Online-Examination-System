@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Add Questions</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">ExamPortal Admin</div>
+
+        <div class="nav-links">
+            <a href="/manage-questions">Back</a>
+            <a href="/admin-logout">Logout</a>
+        </div>
+
+    </nav>
+
+    <div class="form-container">
+
+        <h2>Add Examination Questions</h2>
+
+        <h3>{{ exam.exam_name }}</h3>
+
+        <p>Exam Code: {{ exam.exam_code }}</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %} {% for category, message in messages %}
+        <div class="message {{ category }}">
+            {{ message }}
+        </div>
+        {% endfor %} {% endwith %}
+
+        <form method="POST">
+
+            <textarea name="question_text" placeholder="Enter your question" required rows="4"></textarea>
+
+            <input type="text" name="option_a" placeholder="Option A" required>
+
+            <input type="text" name="option_b" placeholder="Option B" required>
+
+            <input type="text" name="option_c" placeholder="Option C" required>
+
+            <input type="text" name="option_d" placeholder="Option D" required>
+
+            <label>Select Correct Answer:</label>
+
+            <select name="correct_answer" required>
+
+            <option value="">Select Answer</option>
+
+            <option value="A">Option A</option>
+            <option value="B">Option B</option>
+            <option value="C">Option C</option>
+            <option value="D">Option D</option>
+
+        </select>
+
+            <button type="submit">
+            Add Question
+        </button>
+
+        </form>
+
+        <br>
+
+        <a href="/manage-questions">
+        Back to Manage Questions
+    </a>
+
+    </div>
+
+</body>
+
+</html>

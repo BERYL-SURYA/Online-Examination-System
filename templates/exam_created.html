@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Exam Created</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="form-container success-container">
+
+        <h2>Exam Created Successfully!</h2>
+
+        <p>Your examination has been saved.</p>
+
+        <div class="exam-details">
+
+            <p><strong>Exam Name:</strong> {{ exam.exam_name }}</p>
+
+            <p><strong>Subject:</strong> {{ exam.subject }}</p>
+
+            <p><strong>Duration:</strong> {{ exam.duration }} Minutes</p>
+
+            <p><strong>Total Marks:</strong> {{ exam.total_marks }}</p>
+
+        </div>
+
+        <h3>Your Unique Exam Code</h3>
+
+        <div class="exam-code">
+            {{ exam.exam_code }}
+        </div>
+
+        <p>Share this code with students after publishing the examination.</p>
+
+        <a href="/admin-dashboard">
+            <button type="button">Back to Dashboard</button>
+        </a>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Result Details</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f3f5fb;
+            color: #222;
+        }
+        
+        .navbar {
+            background: #192957;
+            color: white;
+            padding: 20px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .navbar h2 {
+            color: white;
+            margin: 0;
+        }
+        
+        .navbar a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .container {
+            width: 85%;
+            margin: 35px auto;
+        }
+        
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.07);
+        }
+        
+        h1,
+        h2 {
+            color: #203c8c;
+        }
+        
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            text-align: center;
+        }
+        
+        .summary-box {
+            background: #f0f3fa;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        .summary-box h2 {
+            margin-bottom: 5px;
+        }
+        
+        .question {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .option {
+            padding: 12px;
+            margin: 8px 0;
+            background: #f3f5fb;
+            border-radius: 6px;
+        }
+        
+        .correct {
+            background: #d9f7df;
+            color: #08752a;
+            font-weight: bold;
+        }
+        
+        .wrong {
+            background: #ffe0e0;
+            color: #c62828;
+            font-weight: bold;
+        }
+        
+        .answer-info {
+            margin-top: 15px;
+            padding: 12px;
+            background: #f0f3fa;
+            border-radius: 7px;
+        }
+        
+        .back-btn {
+            display: inline-block;
+            background: #203c8c;
+            color: white;
+            padding: 13px 25px;
+            border-radius: 7px;
+            text-decoration: none;
+        }
+        
+        @media(max-width: 768px) {
+            .summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .container {
+                width: 94%;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+        <h2>ExamPortal Admin</h2>
+
+        <a href="{{ url_for('admin_results') }}">
+            Back to Results
+        </a>
+
+    </nav>
+
+
+    <div class="container">
+
+        <!-- STUDENT DETAILS -->
+
+        <div class="card">
+
+            <h1>Student Examination Details</h1>
+
+            <p>
+                <b>Student Name:</b> {{ result.name }}
+            </p>
+
+            <p>
+                <b>Email:</b> {{ result.email }}
+            </p>
+
+            <p>
+                <b>Examination:</b> {{ result.exam_name }}
+            </p>
+
+            <p>
+                <b>Subject:</b> {{ result.subject }}
+            </p>
+
+            <p>
+                <b>Submitted At:</b> {{ result.submitted_at }}
+            </p>
+
+        </div>
+
+
+        <!-- PERFORMANCE SUMMARY -->
+
+        <div class="card">
+
+            <h2>Performance Summary</h2>
+
+            <div class="summary">
+
+                <div class="summary-box">
+
+                    <h2>{{ correct }}</h2>
+
+                    Correct Answers
+
+                </div>
+
+
+                <div class="summary-box">
+
+                    <h2>{{ wrong }}</h2>
+
+                    Wrong Answers
+
+                </div>
+
+
+                <div class="summary-box">
+
+                    <h2>{{ unanswered }}</h2>
+
+                    Unanswered
+
+                </div>
+
+
+                <div class="summary-box">
+
+                    <h2>{{ percentage }}%</h2>
+
+                    Percentage
+
+                </div>
+
+            </div>
+
+
+            <h2 style="text-align:center; margin-top:30px;">
+
+                Score: {{ correct }} / {{ total_questions }}
+
+            </h2>
+
+
+            <h2 style="text-align:center;">
+
+                {% if percentage >= 50 %}
+
+                <span style="color:green;">PASS</span> {% else %}
+
+                <span style="color:red;">FAIL</span> {% endif %}
+
+            </h2>
+
+        </div>
+
+
+        <!-- QUESTION WISE REVIEW -->
+
+        <div class="card">
+
+            <h2>Question-wise Answer Review</h2>
+
+
+            {% for q in questions %}
+
+            <div class="question">
+
+                <h3>
+                    Question {{ loop.index }}
+                </h3>
+
+
+                <p>
+                    {{ q.question_text }}
+                </p>
+
+
+                <!-- OPTIONS -->
+
+                {% set options = [ ('A', q.option_a), ('B', q.option_b), ('C', q.option_c), ('D', q.option_d) ] %} {% for key, value in options %}
+
+                <div class="option
+
+                            {% if key == q.correct_answer %}
+                                correct
+                            {% elif key == q.selected_answer %}
+                                wrong
+                            {% endif %}
+
+                        ">
+
+                    {{ key }}. {{ value }} {% if key == q.correct_answer %} ✓ Correct Answer {% endif %} {% if key == q.selected_answer and key != q.correct_answer %} ✗ Student's Answer {% endif %}
+
+                </div>
+
+                {% endfor %}
+
+
+                <!-- ANSWER INFORMATION -->
+
+                <div class="answer-info">
+
+                    <p>
+
+                        <b>Student Answer:</b> {{ q.selected_answer or 'Not Answered' }}
+
+                    </p>
+
+
+                    <p>
+
+                        <b>Correct Answer:</b> {{ q.correct_answer }}
+
+                    </p>
+
+
+                    <p>
+
+                        <b>Status:</b> {% if not q.selected_answer %}
+
+                        <span style="color:orange;">
+                                    Unanswered
+                                </span> {% elif q.selected_answer == q.correct_answer %}
+
+                        <span style="color:green;">
+                                    Correct
+                                </span> {% else %}
+
+                        <span style="color:red;">
+                                    Incorrect
+                                </span> {% endif %}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            {% else %}
+
+            <p>No questions found for this examination.</p>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- BACK BUTTON -->
+
+        <a href="{{ url_for('admin_results') }}" class="back-btn">
+
+            Back to Results Dashboard
+
+        </a>
+
+    </div>
+
+</body>
+
+</html>
